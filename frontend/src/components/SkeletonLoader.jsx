@@ -1,12 +1,12 @@
 import React from 'react';
 
-export default function SkeletonLoader({ rows = 4, columns = 3, label = 'Cargando datos del servidor...' }) {
+export default function SkeletonLoader({ rows = 3, columns = 3, label = 'Consultando datos del servidor...' }) {
   const rowItems = Array.from({ length: rows }, (_, i) => `row-${i}`);
   const colItems = Array.from({ length: columns }, (_, j) => `col-${j}`);
 
   return (
-    <div aria-busy="true" aria-live="polite" style={{ marginBottom: '1rem' }}>
-      <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--ink-secondary)', marginBottom: '0.5rem' }}>
+    <div className="skeleton-wrap" aria-busy="true" aria-live="polite">
+      <div className="skeleton-label mono">
         {label}
       </div>
       <div
@@ -18,8 +18,9 @@ export default function SkeletonLoader({ rows = 4, columns = 3, label = 'Cargand
         {rowItems.map((rKey) =>
           colItems.map((cKey) => (
             <div key={`${rKey}-${cKey}`} className="swiss-cell">
-              <div className="skeleton-box" style={{ width: '45%', height: '0.75rem' }} />
-              <div className="skeleton-box" style={{ width: '85%', height: '1.25rem' }} />
+              <div className="skeleton-box" style={{ width: '40%', height: '0.8rem' }} />
+              <div className="skeleton-box" style={{ width: '85%', height: '1.4rem' }} />
+              <div className="skeleton-box" style={{ width: '60%', height: '0.9rem' }} />
             </div>
           ))
         )}

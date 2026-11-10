@@ -5,6 +5,91 @@ import { formatUtcDateTime } from '../features/formatters.js';
 import ErrorAlert from '../components/ErrorAlert.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
 
+function IconFileText() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+    </svg>
+  );
+}
+
+function IconCheck() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 11l3 3L22 4" />
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+    </svg>
+  );
+}
+
+function IconTruck() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="1" y="3" width="15" height="13" />
+      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </svg>
+  );
+}
+
+function IconBox() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    </svg>
+  );
+}
+
+function IconLayers() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </svg>
+  );
+}
+
+function IconCreditCard() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+      <line x1="1" y1="10" x2="23" y2="10" />
+    </svg>
+  );
+}
+
+function IconBarChart() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="18" y1="20" x2="18" y2="10" />
+      <line x1="12" y1="20" x2="12" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="14" />
+    </svg>
+  );
+}
+
+function IconUpload() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="17 8 12 3 7 8" />
+    </svg>
+  );
+}
+
+function IconSliders() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="4" y1="21" x2="4" y2="14" />
+      <line x1="12" y1="21" x2="12" y2="12" />
+      <line x1="20" y1="21" x2="20" y2="16" />
+    </svg>
+  );
+}
+
 export default function DashboardPage() {
   const { user, expiresAt, refreshMe, logout, isCheckingSession, hasRole } = useAuth();
   const navigate = useNavigate();
@@ -18,7 +103,7 @@ export default function DashboardPage() {
       const updatedUser = await refreshMe();
       if (updatedUser) {
         setVerifyMessage(
-          `Sesión verificada con GET /api/auth/me a las ${new Date().toISOString().slice(11, 19)} UTC.`
+          `Sesión verificada contra GET /api/auth/me a las ${new Date().toISOString().slice(11, 19)} UTC.`
         );
       }
     } catch (err) {
@@ -36,156 +121,175 @@ export default function DashboardPage() {
 
   const modules = [
     {
-      folio: 'PASO 01 / REQUISICIONES',
+      step: 'PASO 01',
       title: 'Requisiciones de Compra',
       path: '/app/requisitions',
+      icon: IconFileText,
       allowed: true,
       rolesText: 'requester (propias), buyer, warehouse, admin',
       description:
-        'Crear requisiciones en borrador con centro de costo del departamento del solicitante, consultar líneas/aprobaciones y enviar a revisión.',
+        'Crea requisiciones en borrador asociadas al centro de costo de tu departamento y envíalas a revisión auditable.',
     },
     {
-      folio: 'PASO 02 / APROBACIONES',
-      title: 'Bandeja de Aprobaciones y Decisión',
+      step: 'PASO 02',
+      title: 'Bandeja de Aprobaciones',
       path: '/app/approvals',
+      icon: IconCheck,
       allowed: true,
       rolesText: 'Roles exigidos por approval_rules (sin autoaprobación)',
       description:
-        'Consultar pasos pendientes para tus role_ids actuales y registrar decisión (approved / rejected) con comentarios auditables.',
+        'Inspecciona pasos pendientes para tus roles activos y registra decisiones de aprobación o rechazo con comentarios.',
     },
     {
-      folio: 'PASO 03 / ÓRDENES DE COMPRA',
-      title: 'Órdenes de Compra y Envío',
+      step: 'PASO 03',
+      title: 'Órdenes de Compra',
       path: '/app/orders',
+      icon: IconTruck,
       allowed: hasRole('buyer', 'warehouse', 'finance'),
-      rolesText: 'Lectura: buyer, warehouse, finance, admin | Escritura: buyer, admin',
+      rolesText: 'Lectura: buyer, warehouse, finance | Escritura: buyer, admin',
       description:
-        'Generar orden completa en un único proveedor desde una requisición aprobada y marcar el envío operativo (sent).',
+        'Genera órdenes de compra completas en un único proveedor a partir de requisiciones aprobadas y marca su envío.',
     },
     {
-      folio: 'PASO 04 / RECEPCIONES',
-      title: 'Recepción de Mercancía en Almacén',
+      step: 'PASO 04',
+      title: 'Recepción en Almacén',
       path: '/app/receipts',
+      icon: IconBox,
       allowed: hasRole('buyer', 'warehouse', 'finance'),
-      rolesText: 'Lectura: buyer, warehouse, finance, admin | Escritura: warehouse, admin',
+      rolesText: 'Lectura: buyer, warehouse, finance | Escritura: warehouse, admin',
       description:
-        'Registrar entregas parciales o totales (quantity_received = accepted + rejected) y generar entradas de stock automáticas.',
+        'Registra recepciones parciales o totales discriminando cantidades aceptadas y rechazadas para alimentar inventario.',
     },
     {
-      folio: 'PASO 05 / INVENTARIO',
-      title: 'Saldos de Inventario y Traslados',
+      step: 'PASO 05',
+      title: 'Inventario y Traslados',
       path: '/app/inventory',
+      icon: IconLayers,
       allowed: hasRole('warehouse', 'buyer', 'analyst'),
-      rolesText: 'Saldo: warehouse, buyer, analyst, admin | Traslado: warehouse, admin',
+      rolesText: 'Saldos: warehouse, buyer, analyst | Traslado: warehouse, admin',
       description:
-        'Consultar existencias en mano, reservadas y disponibles por producto/almacén y ejecutar traslados transaccionales.',
+        'Consulta existencias físicas, reservadas y disponibles por almacén y ejecuta traslados entre bodegas.',
     },
     {
-      folio: 'PASO 06 / FACTURAS',
-      title: 'Facturas Conciliadas y Aprobación',
+      step: 'PASO 06',
+      title: 'Facturas de Proveedor',
       path: '/app/invoices',
+      icon: IconFileText,
       allowed: hasRole('finance'),
       rolesText: 'finance, admin',
       description:
-        'Registrar facturas de proveedor con conciliación exacta contra órdenes recibidas y aprobarlas para pago.',
+        'Registra facturas recibidas de proveedores con conciliación exacta contra recepciones y apruébalas para pago.',
     },
     {
-      folio: 'PASO 07 / PAGOS',
-      title: 'Programación y Confirmación de Pagos',
+      step: 'PASO 07',
+      title: 'Programación de Pagos',
       path: '/app/payments',
+      icon: IconCreditCard,
       allowed: hasRole('finance'),
       rolesText: 'finance, admin',
       description:
-        'Programar el pago completo de una factura aprobada y confirmar la fecha y referencia bancaria del pago externo.',
+        'Programa desembolsos sobre facturas aprobadas y confirma la referencia bancaria del pago externo realizado.',
     },
     {
-      folio: 'PASO 08 / ANALÍTICA',
-      title: 'Gasto, Evaluación de Proveedores y Reorden',
+      step: 'PASO 08',
+      title: 'Gasto y Reorden',
       path: '/app/analytics',
+      icon: IconBarChart,
       allowed: hasRole('analyst', 'finance', 'buyer', 'warehouse'),
-      rolesText: 'analyst, finance, buyer, warehouse, admin (según reporte)',
+      rolesText: 'analyst, finance, buyer, warehouse, admin',
       description:
-        'Consultar gasto por moneda/categoría, promedio ponderado de evaluaciones existentes y cálculo de punto de reorden.',
+        'Reportes de gasto por divisa y categoría, evaluaciones de proveedores y cálculo de punto de reorden de existencias.',
     },
     {
-      folio: 'ADMIN 01 / IMPORTACIÓN DE PRECIOS',
-      title: 'Importación Autorizada de Observaciones',
+      step: 'ADMIN 01',
+      title: 'Importación de Precios',
       path: '/app/admin/price-imports',
+      icon: IconUpload,
       allowed: hasRole('admin'),
-      rolesText: 'Solo admin',
+      rolesText: 'Solo rol admin',
       description:
-        'Importar lotes de hasta 100 observaciones reales validadas (per_purchase_unit) e inspeccionar errores por fila.',
+        'Importa lotes de hasta 100 observaciones reales validadas e inspecciona fallos por fila sin corromper la base.',
     },
     {
-      folio: 'ADMIN 02 / MAESTROS Y REGLAS',
-      title: 'Mantenimiento de Datos Maestros Permitidos',
+      step: 'ADMIN 02',
+      title: 'Maestros y Reglas',
       path: '/app/admin/masters',
+      icon: IconSliders,
       allowed: hasRole('admin'),
-      rolesText: 'Solo admin (sujeto a middleware/crud-policy.js)',
+      rolesText: 'Solo rol admin (sujeto a crud-policy)',
       description:
-        'Administrar departamentos, centros de costo, monedas, unidades, categorías, productos, proveedores, almacenes y reglas.',
+        'Mantenimiento de departamentos, centros de costo, monedas, unidades, categorías, proveedores y almacenes.',
     },
   ];
 
   return (
     <div>
-      <section className="page-masthead" aria-labelledby="dashboard-heading">
-        <div className="page-masthead-primary">
-          <span className="folio-num">PANEL OPERATIVO — SESIÓN EN MEMORIA</span>
-          <h1 id="dashboard-heading" className="page-title">
-            Bienvenido, {user?.full_name}
+      {/* TARJETA DE BIENVENIDA Y ACTOR */}
+      <section className="welcome" aria-labelledby="dash-welcome-heading">
+        <div className="welcome-card">
+          <span className="eyebrow on-dark" style={{ color: 'var(--signal-on-dark)' }}>
+            Consola Operativa Clavos
+          </span>
+          <h1 id="dash-welcome-heading">
+            Hola, {user?.full_name}
           </h1>
-          <p className="page-description">
-            Esta consola adapta la navegación a los roles devueltos por el servidor, recordando que cada petición privada valida tu sesión, estado activo y permisos reales en MySQL.
+          <p>
+            Tu sesión Bearer se encuentra activa en memoria. Cada acción que ejecutas verifica tus roles y permisos en MySQL.
           </p>
-          <div className="btn-group" style={{ marginTop: '0.75rem' }}>
+
+          <div className="btn-group" style={{ marginTop: '0.5rem' }}>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-sm btn-outline-light"
               onClick={handleVerifySession}
               disabled={isCheckingSession}
             >
-              {isCheckingSession ? 'Consultando /api/auth/me...' : 'Comprobar sesión actual (/api/auth/me)'}
+              {isCheckingSession ? 'Comprobando sesión...' : 'Verificar estado con /api/auth/me'}
             </button>
-            <button type="button" className="btn btn-danger" onClick={handleLogout}>
-              Cerrar sesión (/api/auth/logout)
+            <button
+              type="button"
+              className="btn btn-sm btn-danger"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
             </button>
           </div>
         </div>
 
+        {/* METADATOS DEL OPERADOR */}
         <div className="page-masthead-meta">
           <div>
-            <span className="folio-num">IDENTIDAD DEL ACTOR ACTUAL</span>
-            <div style={{ marginTop: '0.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+            <span className="folio-num">ROLES ACTIVOS DEL ACTOR</span>
+            <div style={{ marginTop: '0.4rem', display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
               {rolesList.length > 0 ? (
                 rolesList.map((r) => (
                   <StatusBadge key={r} customLabel={`Rol: ${r}`} toneOverride="accent" />
                 ))
               ) : (
-                <StatusBadge customLabel="Sin roles asignados en user_roles" toneOverride="warning" />
+                <StatusBadge customLabel="Sin roles específicos" toneOverride="warning" />
               )}
             </div>
           </div>
 
           <div className="kv-grid">
             <div className="kv-item">
-              <span className="kv-label">ID Usuario (user_id)</span>
+              <span className="kv-label">ID Usuario</span>
               <span className="kv-value mono">#{user?.user_id}</span>
             </div>
             <div className="kv-item">
-              <span className="kv-label">Departamento (department_id)</span>
+              <span className="kv-label">Departamento</span>
               <span className="kv-value mono">
-                {user?.department_id ? `#${user.department_id}` : 'Sin departamento'}
+                {user?.department_id ? `#${user.department_id}` : 'Sin asignar'}
               </span>
             </div>
             <div className="kv-item">
-              <span className="kv-label">IDs de Rol (role_ids)</span>
+              <span className="kv-label">Role IDs</span>
               <span className="kv-value mono">
                 {roleIdsList.length ? roleIdsList.join(', ') : '—'}
               </span>
             </div>
             <div className="kv-item">
-              <span className="kv-label">Expira (expires_at)</span>
+              <span className="kv-label">Expira sesión</span>
               <span className="kv-value mono" style={{ fontSize: '0.78rem' }}>
                 {formatUtcDateTime(expiresAt)}
               </span>
@@ -194,61 +298,69 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <ErrorAlert error={error} title="Error al verificar la sesión" onDismiss={() => setError(null)} />
+      <ErrorAlert error={error} title="Fallo al verificar sesión" onDismiss={() => setError(null)} />
 
       {verifyMessage ? (
         <div className="alert-banner alert-success" role="status">
-          <div className="alert-title">Sesión activa confirmada</div>
+          <div className="alert-title">Sesión activa verificada</div>
           <div className="alert-body">{verifyMessage}</div>
         </div>
       ) : null}
 
       {!user?.department_id && hasRole('requester', 'buyer') ? (
         <div className="alert-banner alert-warning" role="note">
-          <div className="alert-title">Atención para creación de requisiciones</div>
+          <div className="alert-title">Atención para requisiciones</div>
           <div className="alert-body">
-            Tu usuario actual tiene <code>department_id: null</code>. Para crear una requisición (<code>POST /api/operations/requisitions</code>), el usuario debe tener asignado un departamento activo y utilizar un centro de costo perteneciente a ese mismo departamento.
+            Tu usuario tiene <code>department_id: null</code>. Para crear requisiciones (<code>POST /api/operations/requisitions</code>) el backend exige que tengas un departamento activo y uses un centro de costo de ese departamento.
           </div>
         </div>
       ) : null}
 
-      <section className="section-block" aria-labelledby="modules-grid-heading">
+      {/* MÓDULOS DE TRABAJO */}
+      <section className="section-block" aria-labelledby="modules-title">
         <div className="section-header">
           <div>
-            <span className="folio-num">CIRCUITO OPERATIVO Y MÓDULOS CONECTADOS</span>
-            <h2 id="modules-grid-heading" style={{ fontSize: '1.2rem', marginTop: '0.2rem' }}>
-              Módulos de Trabajo por Prioridad del Circuito
+            <span className="folio-num">CIRCUITO DE ABASTECIMIENTO INTEGRAL</span>
+            <h2 id="modules-title" style={{ fontSize: '1.25rem', marginTop: '0.2rem' }}>
+              Módulos Operativos por Fase del Circuito
             </h2>
           </div>
         </div>
-        <div className="swiss-grid swiss-grid-2" style={{ border: 'none' }}>
-          {modules.map((mod) => (
-            <div
-              key={mod.path}
-              className={`swiss-cell ${mod.allowed ? '' : 'swiss-cell-canvas'}`}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
-                <span className="folio-num">{mod.folio}</span>
-                <StatusBadge
-                  customLabel={mod.allowed ? 'Habilitado para tu sesión' : 'Requiere otro rol'}
-                  toneOverride={mod.allowed ? 'success' : 'neutral'}
-                />
+
+        <div className="module-grid">
+          {modules.map((mod) => {
+            const Icon = mod.icon;
+            return (
+              <div
+                key={mod.path}
+                className={`module-card ${mod.allowed ? '' : 'is-locked'}`}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div className="module-icon">
+                    <Icon />
+                  </div>
+                  <span className="module-step">{mod.step}</span>
+                </div>
+
+                <h3 style={{ marginTop: '0.25rem' }}>{mod.title}</h3>
+                <p>{mod.description}</p>
+
+                <div className="module-perms mono">
+                  {mod.rolesText}
+                </div>
+
+                <div style={{ marginTop: '0.5rem' }}>
+                  <Link
+                    to={mod.path}
+                    className={`btn btn-sm ${mod.allowed ? 'btn-primary' : 'btn-secondary'} pill`}
+                    style={{ width: '100%' }}
+                  >
+                    {mod.allowed ? 'Acceder al módulo' : 'Inspeccionar vista'}
+                  </Link>
+                </div>
               </div>
-              <h3 style={{ fontSize: '1.08rem' }}>{mod.title}</h3>
-              <p style={{ fontSize: '0.86rem', color: 'var(--ink-secondary)' }}>{mod.description}</p>
-              <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--ink-secondary)', marginTop: 'auto' }}>
-                Permisos backend: {mod.rolesText}
-              </div>
-              <div className="btn-group" style={{ marginTop: '0.5rem' }}>
-                <Link
-                  to={mod.path}
-                  className={`btn btn-sm ${mod.allowed ? 'btn-primary' : 'btn-secondary'}`}
-                >
-                  {mod.allowed ? 'Abrir módulo' : 'Inspeccionar módulo'}
-                </Link>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>

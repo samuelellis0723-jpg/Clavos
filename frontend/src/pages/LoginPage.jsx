@@ -3,6 +3,16 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../features/AuthContext.jsx';
 import ErrorAlert from '../components/ErrorAlert.jsx';
 
+import measureTapeUrl from '../assets/editorial/cinta-metrica.webp';
+
+function ChevronDown() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
 export default function LoginPage() {
   const { login, isAuthenticated, user, authNotice, setAuthNotice } = useAuth();
   const navigate = useNavigate();
@@ -32,22 +42,24 @@ export default function LoginPage() {
 
   if (isAuthenticated && user) {
     return (
-      <div className="section-block">
-        <div className="section-body">
-          <span className="folio-num">SESIÓN ACTIVA EN MEMORIA</span>
-          <h1 style={{ fontSize: '1.4rem', marginTop: '0.35rem' }}>
-            Sesión iniciada como {user.full_name} ({user.email})
-          </h1>
-          <p style={{ marginTop: '0.5rem', color: 'var(--ink-secondary)' }}>
-            Tu token opaco Bearer ya se encuentra activo en memoria de la aplicación.
-          </p>
-          <div className="btn-group" style={{ marginTop: '1rem' }}>
-            <Link to="/app" className="btn btn-primary">
-              Ir al panel operativo
-            </Link>
-            <Link to="/catalog" className="btn btn-secondary">
-              Ver catálogo público
-            </Link>
+      <div className="wrap" style={{ paddingBlock: '4rem' }}>
+        <div className="section-block">
+          <div className="section-body" style={{ padding: '2.5rem 1.5rem' }}>
+            <span className="eyebrow">SESIÓN ACTIVA EN MEMORIA</span>
+            <h1 className="h-section" style={{ marginTop: '0.4rem' }}>
+              Sesión iniciada como {user.full_name}
+            </h1>
+            <p style={{ marginTop: '0.5rem', color: 'var(--steel)' }}>
+              Tu token opaco Bearer se encuentra activo en la memoria de la aplicación (<code>{user.email}</code>).
+            </p>
+            <div className="btn-group" style={{ marginTop: '1.25rem' }}>
+              <Link to="/app" className="btn btn-primary pill">
+                Ir al panel operativo
+              </Link>
+              <Link to="/catalog" className="btn btn-secondary pill">
+                Explorar catálogo público
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -55,64 +67,70 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
-      <section className="page-masthead" aria-labelledby="login-heading">
-        <div className="page-masthead-primary">
-          <span className="folio-num">ACCESO PRIVADO — POST /api/auth/login</span>
-          <h1 id="login-heading" className="page-title">
-            Inicio de Sesión Operativo
+    <div className="auth-grid">
+      {/* PANEL VISUAL EDITORIAL */}
+      <aside className="auth-visual" aria-hidden="true">
+        <img
+          src={measureTapeUrl}
+          alt=""
+          width="896"
+          height="1200"
+        />
+        <div className="auth-visual-copy">
+          <span className="eyebrow on-dark" style={{ color: 'var(--signal-on-dark)' }}>
+            Consola Operativa Segura
+          </span>
+          <h1 className="display display-l">
+            Control integral del abastecimiento.
           </h1>
-          <p className="page-description">
-            Acceso al circuito interno de requisiciones, aprobaciones, órdenes de compra, recepciones, inventario, facturas, pagos y administración de maestros.
+          <p>
+            Acceso al circuito de requisiciones, aprobaciones, órdenes de compra, recepciones, inventario y finanzas. Autenticación verificada por <code>scrypt</code> con tokens opacos en memoria.
           </p>
+          <div className="mono" style={{ fontSize: '0.74rem', color: '#a8adb5' }}>
+            Sin cookies inseguras · Sin contraseñas demo precargadas · Auditoría por paso
+          </div>
         </div>
+      </aside>
 
-        <div className="page-masthead-meta">
+      {/* PANEL DE FORMULARIO */}
+      <div className="auth-panel">
+        <div className="auth-card">
           <div>
-            <span className="folio-num">ARQUITECTURA DE SESIÓN</span>
-            <p style={{ marginTop: '0.35rem', color: 'var(--ink-secondary)', fontSize: '0.825rem' }}>
-              El servidor emite un token aleatorio opaco de 64 caracteres hexadecimales (<code>Bearer</code>) y almacena únicamente su hash SHA-256 en MySQL. El token se conserva en memoria de React; al recargar la página o expirar, deberás autenticarte de nuevo.
+            <span className="eyebrow">Acceso Privado</span>
+            <h2 className="display" style={{ fontSize: '2rem', marginTop: '0.35rem' }}>
+              Iniciar sesión
+            </h2>
+            <p style={{ color: 'var(--steel)', fontSize: '0.92rem', marginTop: '0.25rem' }}>
+              Ingresa tus credenciales corporativas habilitadas en MySQL.
             </p>
           </div>
-          <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--ink-secondary)' }}>
-            Sin registro público | Sin cuentas demo preinstaladas
-          </div>
-        </div>
-      </section>
 
-      {authNotice ? (
-        <div className="alert-banner alert-warning" role="status">
-          <div className="alert-title">Aviso de sesión</div>
-          <div className="alert-body">{authNotice}</div>
-          <div style={{ marginTop: '0.4rem' }}>
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary"
-              onClick={() => setAuthNotice(null)}
-            >
-              Entendido
-            </button>
-          </div>
-        </div>
-      ) : null}
+          {authNotice ? (
+            <div className="alert-banner alert-warning" role="status">
+              <div className="alert-title">Aviso de sesión</div>
+              <div className="alert-body">{authNotice}</div>
+              <div style={{ marginTop: '0.4rem' }}>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary pill"
+                  onClick={() => setAuthNotice(null)}
+                >
+                  Entendido
+                </button>
+              </div>
+            </div>
+          ) : null}
 
-      <ErrorAlert
-        error={error}
-        title="No fue posible iniciar sesión"
-        onDismiss={() => setError(null)}
-      />
+          <ErrorAlert
+            error={error}
+            title="No fue posible iniciar sesión"
+            onDismiss={() => setError(null)}
+          />
 
-      <div className="swiss-grid swiss-grid-asymmetric">
-        <section className="swiss-cell" aria-labelledby="credentials-form-title">
-          <span className="folio-num">CREDENCIALES VERIFICADAS POR SCRYPT</span>
-          <h2 id="credentials-form-title" style={{ fontSize: '1.2rem' }}>
-            Ingresar al Sistema
-          </h2>
-
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.5rem' }}>
+          <form className="auth-form" onSubmit={handleSubmit}>
             <div className="form-field">
               <label htmlFor="login-email" className="form-label">
-                Correo electrónico corporativo (email)
+                Correo corporativo (email)
               </label>
               <input
                 id="login-email"
@@ -123,13 +141,13 @@ export default function LoginPage() {
                 className="form-control"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="usuario@dominio"
+                placeholder="operador@ferreteriaclavos.com"
               />
             </div>
 
             <div className="form-field">
               <label htmlFor="login-password" className="form-label">
-                Contraseña (password)
+                Contraseña
               </label>
               <input
                 id="login-password"
@@ -140,50 +158,47 @@ export default function LoginPage() {
                 className="form-control"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Ingresa tu contraseña habilitada"
+                placeholder="••••••••••••"
               />
               <span className="form-helper">
-                Tras 5 intentos fallidos consecutivos, la credencial se bloquea temporalmente por 15 minutos. El servidor también limita intentos por IP (HTTP 429).
+                Tras 5 intentos fallidos consecutivos, el acceso se bloquea por 15 minutos.
               </span>
             </div>
 
-            <div className="btn-group" style={{ marginTop: '0.5rem' }}>
-              <button type="submit" className="btn btn-primary" disabled={submitting}>
-                {submitting ? 'Verificando credenciales...' : 'Iniciar sesión'}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '0.5rem' }}>
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg pill"
+                disabled={submitting}
+              >
+                {submitting ? 'Verificando credenciales...' : 'Ingresar al sistema'}
               </button>
-              <Link to="/catalog" className="btn btn-secondary">
-                Continuar en catálogo público
+              <Link to="/catalog" className="btn btn-ghost pill">
+                ← Continuar en catálogo público
               </Link>
             </div>
           </form>
-        </section>
 
-        <aside className="swiss-cell swiss-cell-canvas" aria-labelledby="provisioning-help-title">
-          <span className="folio-num">PROCEDIMIENTO ADMINISTRATIVO CLI</span>
-          <h2 id="provisioning-help-title" style={{ fontSize: '1.1rem' }}>
-            ¿Cómo habilitar una cuenta en tu entorno local?
-          </h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--ink-secondary)' }}>
-            Por seguridad, no existen usuarios de prueba con contraseñas fijas ni endpoints públicos de registro. Un operador habilita cuentas desde la terminal del backend conectada a MySQL:
-          </p>
-          <pre
-            className="mono"
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid var(--grid-hairline)',
-              padding: '0.75rem',
-              fontSize: '0.75rem',
-              overflowX: 'auto',
-              margin: 0,
-            }}
-          >
+          {/* AYUDA TÉCNICA DE APROVISIONAMIENTO CLI */}
+          <details className="help-details">
+            <summary>
+              <span>¿Cómo habilitar un operador en tu entorno?</span>
+              <ChevronDown />
+            </summary>
+            <div className="help-body">
+              <p>
+                Por seguridad, no existen cuentas predeterminadas. Un operador se habilita desde la terminal del backend conectada a MySQL:
+              </p>
+              <pre>
 {`cd backend
 npm run access:provision < /ruta/privada/acceso.json`}
-          </pre>
-          <p style={{ fontSize: '0.8rem', color: 'var(--ink-secondary)' }}>
-            Roles técnicos reconocidos por el recorrido: <code>admin</code>, <code>requester</code>, <code>buyer</code>, <code>warehouse</code>, <code>finance</code>, <code>analyst</code>, además de cualquier rol específico asignado en una regla de aprobación (<code>approval_rules</code>).
-          </p>
-        </aside>
+              </pre>
+              <p style={{ fontSize: '0.78rem' }}>
+                Roles disponibles: <code>admin</code>, <code>requester</code>, <code>buyer</code>, <code>warehouse</code>, <code>finance</code>, <code>analyst</code>.
+              </p>
+            </div>
+          </details>
+        </div>
       </div>
     </div>
   );

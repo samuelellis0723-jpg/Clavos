@@ -1,5 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" fill="#18181B"/>
-  <rect x="6" y="6" width="52" height="52" fill="none" stroke="#FFFFFF" stroke-width="2"/>
-  <text x="16" y="40" font-family="monospace" font-weight="700" font-size="24" fill="#FFFFFF">CL</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <rect width="48" height="48" rx="12" fill="#141518"/>
+  <!-- Stylized nail shaft and head -->
+  <path d="M14 16h20v4H26v18h-4V20h-8v-4z" fill="#F3F3F0"/>
+  <!-- Point -->
+  <path d="M22 38h4l-2 4-2-4z" fill="#F3F3F0"/>
+  <!-- Signal Orange dot accent on the head -->
+  <circle cx="34" cy="14" r="3.5" fill="#E8501C"/>
 </svg>

@@ -1,61 +1,89 @@
-# Design System: Ferretería Clavos — Catálogo y Sistema Operativo de Abastecimiento
+# Sistema de diseño: Ferretería Clavos — "Taller editorial"
 
-> **Nota sobre el entorno de ejecución:** Este sistema de diseño fue generado localmente aplicando las directrices de `.agents/skills/frontend-design/SKILL.md` (ancla **Swiss**) y `.agents/skills/taste-design/SKILL.md`, ya que el entorno actual no cuenta con herramientas autenticadas de **Stitch MCP** (`StitchMCP`). Todas las reglas semánticas, tokens de color, arquitectura tipográfica, accesibilidad y preferencias de movimiento reducido están codificadas directamente en este documento y en el CSS de la aplicación.
+> **Nota de entorno:** Stitch MCP no está autenticado en el entorno donde se redactó esta guía. El sistema se definió y aplicó directamente en `src/index.css` y en los componentes React. Si Stitch se habilita más adelante, esta guía es la fuente de verdad para generar pantallas.
 
-## 1. Visual Theme & Atmosphere
+> **Por qué se reemplazó la guía anterior:** la versión previa imponía una retícula suiza de líneas de 1 px en toda la aplicación, prohibía héroes, fotografía, recursos gráficos y tipografía expresiva, y obligaba a usar monoespaciado en casi todos los textos. El resultado era una consola técnica incluso en la parte pública. Esta guía separa dos registros, **público editorial** y **panel de trabajo**, que comparten la misma identidad.
 
-- **Anchor (`frontend-design`):** **Swiss** — Superficie blanca pura (`#FFFFFF`) y neutra fría (`#F7F7F8`), tipografía sans-serif de carácter técnico con números tabulares (`tabular-nums`) para cantidades, precios y códigos, estructura gobernada por una cuadrícula visible de líneas de `1px` (*hairline rules*), alineación izquierda rigurosa y un único acento azul (`#002FA7`, Yves Klein Blue).
-- **Differentiator:** **Cuadrícula técnica con folios numerados y fichas de especificación a sangre** — cada módulo del catálogo, grupo de comparación de precios y paso del circuito operativo (requisición → aprobación → orden → recepción → factura → pago) se presenta dentro de celdas delimitadas por bordes estructurales de `1px` con numeración de orden (`01`, `02`, `03`), metadatos en monoespaciado tabular y advertencias contractuales explícitas integradas en la propia retícula.
-- **Density:** `7/10` (Equilibrio entre catálogo público legible y cabina operativa de compras/finanzas con alta densidad de cifras decimales).
-- **Variance:** `6/10` (Retícula asimétrica alineada a la izquierda; sin héroes centrados ni tarjetas decorativas flotantes).
-- **Motion:** `4/10` (Transiciones físicas suaves en `transform` y `opacity`, con respeto absoluto por `@media (prefers-reduced-motion: reduce)`).
+---
 
-## 2. Color Palette & Roles
+## 1. Idea de marca
 
-- **Pure Surface** (`#FFFFFF`) — Superficie primaria de celdas, tablas, formularios y cabeceras.
-- **Neutral Canvas** (`#F7F7F8`) — Superficie base de aplicación, fondos secundarios de agrupación y cabeceras de tabla.
-- **Charcoal Ink** (`#18181B`) — Texto primario (Zinc-950, nunca negro puro `#000000`).
-- **Muted Steel** (`#52525B`) — Texto secundario, etiquetas técnicas, metadatos y descripciones (`AA` garantizado sobre `#FFFFFF` y `#F7F7F8`).
-- **Hairline Grid** (`#E4E4E7`) — Líneas estructurales de `1px` que definen la cuadrícula suiza, divisores de fila y contornos de controles.
-- **Strong Rule** (`#18181B`) — Líneas de énfasis superior (`2px`) en secciones activas o encabezados de documento.
-- **Klein Accent Blue** (`#002FA7`) — Único color de acento para acciones primarias (CTAs), enlaces activos, indicadores de paso actual y anillos de foco (`:focus-visible`).
-- **Semantic Status Colors (Calibrados sin neón):**
-  - **Validated / Approved** (`#15803D` texto / `#F0FDF4` fondo / `#BBF7D0` borde) — Estado activo, aprobado, recibido o conciliado.
-  - **Warning / Stale / Pending** (`#B45309` texto / `#FFFBEB` fondo / `#FDE68A` borde) — Observación antigua (`stale`), política de edad no configurada (`age_policy_not_configured`), borrador o paso pendiente.
-  - **Critical / Rejected / Error** (`#B91C1C` texto / `#FEF2F2` fondo / `#FECACA` borde) — Errores HTTP (`400`, `401`, `403`, `404`, `405`, `409`, `429`, `500`, `503`), rechazos o discrepancias.
+**Clavos es el taller ordenado.** Herramientas y materiales presentados como en una revista: fotografía protagonista, titulares con carácter industrial y mucho aire. La información comercial siempre es honesta: observaciones históricas de precio, con fecha, proveedor y presentación visibles.
 
-## 3. Typography Rules
+- **Público (inicio, catálogo, ficha, comparación):** composición editorial, fotografía o ilustración de marca, titulares grandes, espacios amplios, llamadas a la acción claras.
+- **Panel privado (`/app/*`):** la misma paleta y tipografía, pero sobria y densa cuando hace falta. Tarjetas limpias, tablas legibles, formularios claros. Nada de héroes ni fotografía decorativa.
 
-- **Primary Sans Stack:** `'Plus Jakarta Sans', 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif` — Escala controlada, tracking ajustado (`-0.02em` en titulares), jerarquía conducida por peso (`500`, `600`, `700`) y posición en la retícula.
-- **Technical & Numeric Mono Stack:** `'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace` — Obligatorio para SKUs, códigos de moneda (`CRC`, `USD`), precios unitarios (4 decimales), cantidades (3 decimales), totales monetarios (2 decimales), fechas ISO UTC y folios de documento, siempre con `font-variant-numeric: tabular-nums`.
-- **Body Copy:** Altura de línea `1.5`, ancho máximo de lectura `65ch` en bloques explicativos y advertencias de negocio.
-- **Banned:** Fuentes serif en interfaces operativas, texto centrado en encabezados, gradientes en textos o fondos cálidos color crema.
+Referencias de actitud: la claridad de Apple (una idea por pantalla, jerarquía obvia) y la presentación editorial de Zara (imagen grande, tipografía con aplomo, márgenes generosos). Identidad propia: grafito, concreto y naranja de señalización. Nada de tonos pastel ni cremas de pastelería.
 
-## 4. Component Stylings
+## 2. Paleta
 
-- **Buttons:** Rectangulares de precisión suiza (`border-radius: 2px`), altura táctil mínima de `44px`, sin resplandores exteriores. Estado activo con traslación táctil (`transform: translateY(1px)`). Variante primaria en `#002FA7` con texto `#FFFFFF`; variante secundaria con fondo `#FFFFFF` y borde `#18181B` o `#E4E4E7`.
-- **Grid Cells & Panels:** En lugar de tarjetas flotantes con sombras difusas, los contenedores se integran en la cuadrícula mediante bordes de `1px solid #E4E4E7` y divisores superiores de `2px solid #18181B` cuando representan documentos formales (requisición, orden, recepción, factura, comprobante de pago).
-- **Inputs & Selects:** Etiqueta explícita encima del control (`label`), texto de ayuda técnico opcional y mensaje de error debajo del campo con borde `#B91C1C`. Altura mínima `44px`, anillo de foco visible de `2px solid #002FA7` con `outline-offset: 2px`.
-- **Skeletal Loaders:** Bloques rectangulares con pulso de opacidad suave que respetan exactamente la geometría de las filas o celdas antes de recibir datos; sin spinners circulares genéricos.
-- **Empty States:** Composiciones estructuradas que explican la causa real (ej. catálogo sin productos activos, producto sin observaciones validadas o bandeja sin aprobaciones para los roles del usuario) y ofrecen la acción correspondiente.
-- **Confirmation Modals:** Diálogo accesible (`role="dialog"`, `aria-modal="true"`, cierre con `Escape` y foco controlado) obligatorio antes de acciones irreversibles: enviar requisición, emitir decisión de aprobación/rechazo, enviar orden, registrar recepción, aprobar factura, confirmar referencia de pago externo o eliminar un maestro permitido.
+| Rol | Token | Valor | Uso |
+| --- | --- | --- | --- |
+| Grafito (tinta) | `--ink` | `#141518` | Texto principal, superficies oscuras, footer |
+| Grafito 2 | `--ink-2` | `#2A2D33` | Superficies oscuras secundarias |
+| Acero | `--steel` | `#5B6068` | Texto secundario (6.3:1 sobre blanco) |
+| Acero 2 | `--steel-2` | `#6B7078` | Metadatos (≈5:1 sobre blanco) |
+| Línea | `--line` | `#E2E2DE` | Divisores y bordes suaves |
+| Concreto | `--canvas` | `#F3F3F0` | Fondo de aplicación |
+| Concreto 2 | `--concrete` | `#E9E9E5` | Láminas de producto e ilustración |
+| Superficie | `--surface` | `#FFFFFF` | Tarjetas, tablas, formularios |
+| Naranja señal | `--signal` | `#E8501C` | Bloques gráficos, acentos grandes, texto grande sobre grafito |
+| Naranja fuerte | `--signal-strong` | `#C2410C` | Botón primario con texto blanco (5.2:1) y enlaces |
+| Naranja profundo | `--signal-deep` | `#9A330A` | Hover y presionado |
+| Naranja sobre oscuro | `--signal-on-dark` | `#FF7A45` | Texto de acento sobre grafito (7:1) |
+| Cinta métrica | `--tape` | `#F2C230` | Anillo de foco sobre fondos oscuros, detalle puntual |
 
-## 5. Layout Principles
+Los estados (éxito, aviso, error e información) usan tonos calibrados con contraste AA. **Nunca** se usa el naranja como color de error: el error tiene su propio rojo.
 
-- **Grid-First Architecture:** Uso de CSS Grid con brechas de `1px` sobre fondo `#E4E4E7` para formar retículas de líneas continuas (`hairline grid`), contenido dentro de un ancho máximo de `1440px`.
-- **Asymmetric Header & Split Views:** Encabezados alineados a la izquierda con metadatos de contexto o folios numerados en la columna complementaria.
-- **Responsive Collapse (`< 768px`):** Todas las cuadrículas multicolumna colapsan a una sola columna sin desbordamiento horizontal; las tablas anchas se envuelven en contenedores desplazables accesibles con indicadores claros.
-- **Viewport Stability:** Uso de `min-height: 100dvh` para el contenedor raíz de la aplicación.
+## 3. Tipografía
 
-## 6. Motion & Interaction
+- **Titulares:** `Archivo Variable` con anchura expandida (`font-stretch: 112–125%`), peso 700–800 y tracking negativo. Da el carácter industrial de un rótulo de taller.
+- **Interfaz y lectura:** `Inter Variable`, 400–600, interlineado de 1.5 y ancho de lectura de unos 65ch.
+- **Monoespaciado:** `JetBrains Mono Variable` **solo** para SKU, códigos de barras, precios observados, cantidades, monedas, fechas UTC y folios. Siempre con `tabular-nums`. No se usa en etiquetas ni en párrafos.
+- Las fuentes se empaquetan con `@fontsource` (sin dependencia de CDN).
 
-- **Hardware-Accelerated Transitions:** Solo se animan `transform` y `opacity` (`150ms cubic-bezier(0.22, 1, 0.36, 1)`).
-- **Reduced Motion Compliance:** Bajo `@media (prefers-reduced-motion: reduce)`, todas las animaciones y transiciones se desactivan o reducen a cambios instantáneos, garantizando comodidad visual y accesibilidad.
+Escala pública: display `clamp(2.6rem, 6vw, 5.25rem)`, H2 `clamp(1.75rem, 3.2vw, 2.75rem)`. Escala del panel: título de página `clamp(1.5rem, 2.4vw, 2rem)` y encabezados de sección de 1.1 a 1.25rem.
 
-## 7. Anti-Patterns & Content Discipline (Banned)
+## 4. Imagen y recursos gráficos
 
-- **Prohibido inventar datos de negocio:** Nunca mostrar precios ficticios de EPA ni de otros proveedores, ni métricas falsas, ni nombres genéricos (`John Doe`, `Acme`), ni cuentas o contraseñas de demostración.
-- **Prohibido mezclar grupos de comparación:** Nunca ordenar ni declarar un "mejor precio" entre ofertas con distinto `comparison_group` o con `price_basis: "unconfirmed_legacy_basis"`.
-- **Prohibido prometer vigencia:** Nunca ocultar que `is_current_price_guaranteed` es `false` ni que las observaciones de precios son históricas.
-- **Prohibido usar emojis o glifos Unicode como iconos decorativos:** Usar iconos SVG limpios o etiquetas tipográficas directas.
-- **Prohibido convertir decimales a `Number` para cálculos financieros:** Usar siempre cadenas decimales y aritmética `BigInt` escalada para previsualizaciones de subtotales e impuestos.
+- **Fotografía editorial de marca** (`src/assets/editorial/*.webp`): composiciones de herramientas y materiales genéricos sobre concreto y grafito, con un bloque naranja como firma. Se usa en la portada, el catálogo, las bandas editoriales y el login. Cada imagen lleva un pie que aclara que es una **composición editorial** y que no representa productos del catálogo.
+- **Láminas de producto (`ProductPlate`):** la API no entrega imágenes de producto. Cada producto se muestra con una lámina ilustrada: un pictograma de línea según la categoría (fijaciones, herramienta manual, plomería, pintura, electricidad, madera, construcción, jardín, seguridad o genérico) y el SKU. **Nunca** se simula una foto real del producto.
+- Pictogramas SVG propios con trazo de 1.5–2 px. Sin emojis.
+
+## 5. Composición
+
+- Contenedor `--wrap: 1320px` con margen lateral `clamp(1rem, 4vw, 2.5rem)`.
+- **Público:** secciones a sangre con ritmo vertical amplio (`clamp(4rem, 9vw, 8rem)`), héroe dividido en texto e imagen, bandas oscuras alternas y rejillas de producto de 1, 2, 3 o 4 columnas según el ancho.
+- **Panel:** barra lateral de módulos agrupados (compra, existencias, finanzas, análisis y administración) que en tablet y móvil pasa a una tira horizontal desplazable. Contenido en tarjetas blancas con radio de 12 px y borde `--line`.
+- Puntos de corte: 640, 860, 1024 y 1280 px.
+
+## 6. Componentes
+
+- **Botones:** radio de 999 px (píldora) en la parte pública y de 10 px en el panel. Altura mínima de 44 px. Primario en `--signal-strong` con texto blanco, secundario con borde `--line-strong` y botón oscuro en `--ink`.
+- **Campos:** etiqueta visible encima, 44 px de alto, radio de 10 px y foco con un anillo de 3 px en naranja translúcido más el borde naranja.
+- **Insignias:** píldoras pequeñas en Inter. El tono acompaña el estado.
+- **Tarjeta de producto:** lámina ilustrada arriba, categoría, nombre, marca y modelo, SKU en mono, unidad y dos acciones: "Ver ficha" y "Comparar precios".
+- **Grupo de comparación:** cabecera con las cuatro condiciones del grupo (unidad de compra, presentación, moneda e impuestos). En escritorio las ofertas se muestran en tabla y en móvil, en fichas apiladas. Cada oferta muestra proveedor, presentación, precio observado con moneda e impuesto, fecha UTC, antigüedad, frescura, fuente y "precio actual no garantizado".
+- **Estados:** esqueletos con pulso suave, estados vacíos que explican la causa real y errores con código HTTP y opción de reintento.
+- **Modales:** `role="dialog"`, `aria-modal`, cierre con Escape y foco controlado.
+
+## 7. Movimiento
+
+- Entrada suave del héroe (opacidad y desplazamiento de 12 px, 600 ms), elevación de tarjetas al pasar el cursor (−3 px) y zoom leve de la imagen (1.03).
+- Solo se animan `transform` y `opacity`. Curva `cubic-bezier(.22, 1, .36, 1)`.
+- `@media (prefers-reduced-motion: reduce)` desactiva todas las animaciones y transiciones.
+
+## 8. Accesibilidad
+
+- Contraste AA en todo texto y anillo de foco visible (`:focus-visible`), en naranja sobre fondos claros y en amarillo cinta sobre oscuros.
+- Enlace "Saltar al contenido", navegación móvil con `aria-expanded` y cierre con Escape.
+- Objetivos táctiles de al menos 44 px.
+- Imágenes decorativas con `alt=""` y fotografías editoriales con `alt` descriptivo y pie aclaratorio.
+
+## 9. Disciplina de contenido (obligatorio)
+
+- **No inventar datos:** ni precios, ni proveedores, ni existencias, ni métricas, ni fotos de producto. Las cifras visibles provienen de la API.
+- **No mezclar grupos:** solo se comparan ofertas con el mismo `comparison_group`. Las observaciones `unconfirmed_legacy_basis` van aparte, sin orden por precio.
+- **No prometer vigencia:** siempre se muestra que `is_current_price_guaranteed` es falso y que las observaciones son históricas, con fecha y antigüedad.
+- **No usar `Number` para dinero:** los montos se muestran como cadenas decimales y los cálculos usan `BigInt` escalado (`services/decimal.js`).
+- **Sin cuentas demo** ni contraseñas en la interfaz.
