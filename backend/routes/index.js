@@ -1,0 +1,58 @@
+'use strict';
+
+const { Router } = require('express');
+
+const resources = {
+  approval_rules: require('./approval_rules'),
+  contract_lines: require('./contract_lines'),
+  contracts: require('./contracts'),
+  cost_centers: require('./cost_centers'),
+  currencies: require('./currencies'),
+  departments: require('./departments'),
+  evaluation_criteria: require('./evaluation_criteria'),
+  expense_categories: require('./expense_categories'),
+  inventory_movement_lines: require('./inventory_movement_lines'),
+  inventory_movements: require('./inventory_movements'),
+  invoice_lines: require('./invoice_lines'),
+  invoice_receipt_allocations: require('./invoice_receipt_allocations'),
+  payment_allocations: require('./payment_allocations'),
+  payments: require('./payments'),
+  price_comparison_items: require('./price_comparison_items'),
+  price_comparisons: require('./price_comparisons'),
+  price_import_batches: require('./price_import_batches'),
+  price_sources: require('./price_sources'),
+  product_identifiers: require('./product_identifiers'),
+  product_warehouse_policies: require('./product_warehouse_policies'),
+  products: require('./products'),
+  purchase_order_lines: require('./purchase_order_lines'),
+  purchase_orders: require('./purchase_orders'),
+  receipt_lines: require('./receipt_lines'),
+  receipts: require('./receipts'),
+  requisition_approvals: require('./requisition_approvals'),
+  requisition_lines: require('./requisition_lines'),
+  requisition_order_allocations: require('./requisition_order_allocations'),
+  requisitions: require('./requisitions'),
+  roles: require('./roles'),
+  spend_analysis_runs: require('./spend_analysis_runs'),
+  spend_anomalies: require('./spend_anomalies'),
+  stock_lots: require('./stock_lots'),
+  stock_reservations: require('./stock_reservations'),
+  supplier_contacts: require('./supplier_contacts'),
+  supplier_evaluation_scores: require('./supplier_evaluation_scores'),
+  supplier_evaluations: require('./supplier_evaluations'),
+  supplier_invoices: require('./supplier_invoices'),
+  supplier_price_observations: require('./supplier_price_observations'),
+  supplier_products: require('./supplier_products'),
+  suppliers: require('./suppliers'),
+  units_of_measure: require('./units_of_measure'),
+  user_roles: require('./user_roles'),
+  users: require('./users'),
+  warehouses: require('./warehouses'),
+};
+const router = Router();
+
+for (const [resource, resourceRouter] of Object.entries(resources)) {
+  router.use(`/${resource}`, resourceRouter);
+}
+
+module.exports = router;
