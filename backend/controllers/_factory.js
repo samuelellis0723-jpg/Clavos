@@ -1,44 +1,17 @@
 'use strict';
 
-const { ValidationError, UniqueConstraintError, ForeignKeyConstraintError } = require('sequelize');
-
+const { errorHandler } = require('../lib/errors');
 const DEFAULT_PAGE_SIZE = 50;
 const MAX_PAGE_SIZE = 500;
 
-function errorResponse(res, error) {
-  if (error.status === 400) {
-    return res.status(400).json({ error: { code: 'INVALID_REQUEST', message: error.message } });
-  }
-  if (error instanceof ValidationError) {
-    return res.status(400).json({
-      error: {
-        code: 'VALIDATION_ERROR',
-        message: 'Los datos enviados no son válidos.',
-        details: error.errors.map(item => ({ field: item.path, message: item.message })),
-      },
-    });
-  }
-  if (error instanceof UniqueConstraintError) {
-    return res.status(409).json({ error: { code: 'CONFLICT', message: 'Ya existe un registro con esos valores únicos.' } });
-  }
-  if (error instanceof ForeignKeyConstraintError) {
-    return res.status(409).json({ error: { code: 'REFERENCE_CONFLICT', message: 'La operación contradice una relación existente.' } });
-  }
-  if (error.name === 'SequelizeDatabaseError' && [1265, 1292, 1366, 1406].includes(error.original && error.original.errno)) {
-    return res.status(400).json({ error: { code: 'INVALID_DATA', message: 'Uno o más valores no son compatibles con el esquema.' } });
-  }
-  if (error.name === 'SequelizeConnectionError' || error.name === 'SequelizeConnectionRefusedError' || error.name === 'SequelizeHostNotFoundError') {
-    return res.status(503).json({ error: { code: 'DATABASE_UNAVAILABLE', message: 'La base de datos no está disponible.' } });
-  }
-  return res.status(500).json({ error: { code: 'INTERNAL_ERROR', message: 'Ocurrió un error al procesar la solicitud.' } });
-}
+function errorResponse(res, error) { return errorHandler(error, null, res, () => {}); }
 
 function wrap(handler) {
-  return async (req, res) => {
+  return async (req, res, next) => {
     try {
       await handler(req, res);
     } catch (error) {
-      errorResponse(res, error);
+      next(error);
     }
   };
 }
@@ -89,7 +62,7 @@ function createController(Model, { operations = ['list', 'get', 'create', 'updat
       const value = req.params[name];
       if (value === undefined || value === '') invalidRequest(`Falta el parámetro ${name}.`);
       const attribute = Model.rawAttributes[name];
-      if (attribute.type && attribute.type.key === 'INTEGER' && !Number.isSafeInteger(Number(value))) {
+      if (attribute.type && attribute.type.key === 'INTEGER' && (!/^[1-9]\d*$/.test(String(value)) || !Number.isSafeInteger(Number(value)) || Number(value) > 2147483647)) {
         invalidRequest(`El parámetro ${name} debe ser un entero.`);
       }
       key[name] = value;
@@ -119,7 +92,8 @@ function createController(Model, { operations = ['list', 'get', 'create', 'updat
       const fields = new Set(Object.keys(Model.rawAttributes));
       const unknown = Object.keys(query).filter(key => !fields.has(key));
       if (unknown.length) invalidRequest(`Filtros desconocidos: ${unknown.join(', ')}.`);
-      const result = await Model.findAndCountAll({ where: query, limit, offset: (page - 1) * limit });
+      if (Object.values(query).some(value => typeof value !== 'string') || !Number.isSafeInteger((page - 1) * limit) || (page - 1) * limit > 2147483647) invalidRequest('Filtros o paginación no válidos.');
+      const result = await Model.findAndCountAll({ where: query, limit, offset: (page - 1) * limit, order: primaryKeys.map(key => [key, 'ASC']) });
       res.status(200).json({ data: result.rows, pagination: { total: result.count, page, limit } });
     });
   }

@@ -1,5 +1,5 @@
 Project clavos_compras_inventario {
-  database_type: 'PostgreSQL'
+  database_type: 'MySQL'
   Note: 'Modelo relacional para compras, comparación de proveedores, inventario y análisis de gasto de Ferretería Clavos.'
 }
 
@@ -902,3 +902,23 @@ Ref: spend_anomalies.related_invoice_id > supplier_invoices.invoice_id
 Ref: spend_anomalies.reviewed_by_user_id > users.user_id
 Ref: spend_anomalies.currency_code > currencies.currency_code
 Ref: spend_analysis_runs.created_by_user_id > users.user_id
+
+// Extensión de acceso privado: migración aditiva 20261109010000.
+// No se asignan contraseñas a usuarios existentes automáticamente.
+Table auth_credentials {
+  user_id int [pk, not null]
+  password_hash varchar(255) [not null, note: 'Derivación scrypt con sal; nunca contraseña en claro.']
+  failed_attempts int [not null, default: 0]
+  locked_until timestamp
+}
+
+Table auth_sessions {
+  token_hash char(64) [pk, not null, note: 'SHA-256 del token aleatorio; no el token original.']
+  user_id int [not null]
+  created_at timestamp [not null]
+  expires_at timestamp [not null]
+  revoked_at timestamp
+}
+
+Ref: auth_credentials.user_id > users.user_id
+Ref: auth_sessions.user_id > users.user_id

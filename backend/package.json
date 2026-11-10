@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test node tests/unit.test.js",
+    "test:mysql": "NODE_ENV=test RUN_MYSQL_TESTS=1 node --test tests/mysql.test.js",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:status": "sequelize-cli db:migrate:status",
+    "access:provision": "node scripts/provision-access.js"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +25,8 @@
   "devDependencies": {
     "nodemon": "^3.1.14",
     "sequelize-cli": "^6.6.5"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
