@@ -10,7 +10,9 @@
     "test:mysql": "NODE_ENV=test RUN_MYSQL_TESTS=1 node --test tests/mysql.test.js",
     "db:migrate": "sequelize-cli db:migrate",
     "db:status": "sequelize-cli db:migrate:status",
-    "access:provision": "node scripts/provision-access.js"
+    "access:provision": "node scripts/provision-access.js",
+    "prices:sync:mercadolibre": "node scripts/sync-mercado-libre.js",
+    "test:mercadolibre": "node --test tests/mercado-libre.test.js"
   },
   "keywords": [],
   "author": "",

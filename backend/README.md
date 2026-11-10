@@ -354,3 +354,8 @@ Verificación realizada el 9 de noviembre de 2026:
 Disponibles: catálogo/búsqueda/filtros; detalle y comparación de ofertas; login/sesión; consulta administrativa de maestros y mantenimiento permitido; importación y resultados por fila; creación/lista/detalle de requisiciones; bandeja de aprobaciones; orden/envío; recepción; saldo/traslado; factura conciliada/aprobación; programación/confirmación de pago; gasto por moneda/categoría; consulta de cálculos de evaluación/reorden si hay datos reales.
 
 Para probar con datos de negocio hacen falta cuentas habilitadas, roles/reglas de aprobación y datos maestros reales. El catálogo puede estar vacío y funcionar correctamente. La importación requiere observaciones reales autorizadas; EPA automático sigue pendiente de autorización/documentación. Evaluaciones y demanda no se fabrican para llenar dashboards. Edición/cancelación de documentos, variantes de compra/factura/pago, lotes/valuación, administración web de acceso y detección automática de anomalías están detalladas en [business-decisions.md](docs/business-decisions.md).
+
+
+## Mercado Libre Costa Rica
+
+La sincronización real de publicaciones `MCR` se implementa en Node.js mediante la API oficial. Requiere OAuth y equivalencias verificadas de proveedor/producto antes de ejecutar `npm run prices:sync:mercadolibre`; puede programarse con cron. Configuración, límites y procedimiento: [docs/mercado-libre.md](docs/mercado-libre.md). Esta fuente no sustituye la segunda fuente ni las alertas y el ranking pendientes.
